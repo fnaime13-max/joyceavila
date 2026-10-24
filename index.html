@@ -21,8 +21,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Jost:wght@400;500;600&display=swap">
-<link rel="preload" as="image" href="assets/img/joyce-hero.webp" type="image/webp">
-<link rel="stylesheet" href="css/styles.css?v=20261024n">
+<link rel="preload" as="image" href="assets/img/joyce-recorte.webp" type="image/webp">
+<link rel="stylesheet" href="css/styles.css?v=20261024r">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
 {"@type":"Person","@id":"#joyce","name":"Joyce Avila","jobTitle":"Nutricionista","image":"https://joyceavila.felixdias.com/assets/img/joyce-hero.webp","knowsAbout":["Saúde da mulher","Nutrição","Perimenopausa"],"sameAs":["https://www.instagram.com/nutricionistajoyceavila/"]},
@@ -73,39 +73,48 @@
     <span class="marca__nome">Joyce Avila</span>
     <span class="marca__tag">Nutricionista</span>
   </a>
-  <a class="topo__cta" data-wa href="https://wa.me/5547996848763">Agendar consulta</a>
+  <a class="topo__cta magnetico" data-wa href="https://wa.me/5547996848763">Agendar consulta</a>
   <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu"><span></span><span></span></button>
 </header>
 
 <main id="conteudo">
 
-<!-- HERO -->
+<!-- HERO: capa de revista. Nome gigante atrás, anel de folha de ouro como halo, figura em primeiro plano -->
 <section class="hero" id="inicio" aria-labelledby="h1">
+  <div class="hero__palco" id="heroPalco">
+    <p class="hero__nome" aria-hidden="true"><span>Joyce</span><span>Avila</span></p>
+    <div class="hero__figura" id="heroFigura">
+      <canvas class="ouro ouro--halo" id="ouroHero" aria-hidden="true"></canvas>
+      <img src="assets/img/joyce-recorte.webp" width="1049" height="1527" alt="Joyce Avila de blusa branca ombro a ombro, olhando por cima do ombro e sorrindo" fetchpriority="high" onerror="this.closest('.hero__figura').classList.add('sem-foto')">
+      <p class="ph">assets/img/joyce-recorte.webp · 1049×1527 (recorte PNG/WebP transparente)</p>
+    </div>
+    <p class="hero__assinatura" aria-hidden="true">Nº 01 · Saúde da Mulher</p>
+  </div>
+
   <div class="hero__texto">
     <p class="sobrelinha">Nutricionista · Saúde da Mulher</p>
     <h1 id="h1" class="hero__titulo">Não prescrevo dietas, <em>conduzo tratamentos.</em></h1>
     <p class="hero__lead">Nutrição para mulheres que já tentaram “a dieta” e querem, finalmente, alguém acompanhando o caminho.</p>
     <div class="hero__acoes">
-      <a class="btn btn--vinho" data-wa href="https://wa.me/5547996848763">Agendar consulta</a>
+      <a class="btn btn--vinho magnetico" data-wa href="https://wa.me/5547996848763">Agendar consulta</a>
       <a class="link" href="#caminho">Como funciona <svg aria-hidden="true"><use href="#i-seta"/></svg></a>
     </div>
   </div>
 
-  <div class="hero__visual" id="heroVisual">
-    <div class="hero__moldura" aria-hidden="true"></div>
-    <figure class="hero__foto">
-      <img src="assets/img/joyce-hero.webp" width="1040" height="1300" alt="Joyce Avila de blusa branca ombro a ombro, olhando por cima do ombro e sorrindo" fetchpriority="high" onerror="this.parentNode.classList.add('sem-foto')">
-      <figcaption class="ph">assets/img/joyce-hero.webp · 1040×1300 (4:5)</figcaption>
-    </figure>
-    <canvas class="ouro ouro--hero" id="ouroHero" aria-hidden="true"></canvas>
-    <p class="hero__legenda" aria-hidden="true">Nº 01 — Saúde da Mulher</p>
-  </div>
+  <a class="hero__rolar" href="#manifesto" aria-label="Rolar para o manifesto"><span></span></a>
+</section>
 
-  <ul class="hero__fatos">
-    <li><span>Reconhecimento</span><strong data-premio>Eleita a melhor nutricionista de Joinville</strong></li>
-    <li><span>Atendimento</span><strong>Balneário Camboriú · Joinville · On-line</strong></li>
-    <li><span>Registro</span><strong data-crn>CRN 13760P</strong></li>
-  </ul>
+<ul class="hero__fatos" aria-label="Destaques">
+  <li><span>Reconhecimento</span><strong data-premio>Eleita a melhor nutricionista de Joinville</strong></li>
+  <li><span>Atendimento</span><strong>Balneário Camboriú · Joinville · On-line</strong></li>
+  <li><span>Registro</span><strong data-crn>CRN 13760P</strong></li>
+</ul>
+
+<!-- MANIFESTO: as palavras acendem conforme a rolagem -->
+<section class="manifesto" id="manifesto" aria-label="Manifesto">
+  <svg class="manifesto__mono" aria-hidden="true"><use href="#mono"/></svg>
+  <p class="manifesto__txt" id="manifestoTxt">Não prescrevo dietas. <em>Conduzo tratamentos.</em> Cada mulher chega com uma história, uma rotina e um corpo que mudou. O meu trabalho é escutar, estruturar e acompanhar, até o cuidado virar <em>parte da sua vida.</em></p>
+  <p class="manifesto__ass">Joyce Avila</p>
 </section>
 
 <!-- FAIXA EDITORIAL: desliza com a rolagem -->
@@ -179,7 +188,7 @@
     <h2 id="t-premio" class="titulo titulo--claro">Eleita a melhor nutricionista <em>de Joinville.</em></h2>
     <p class="premio__fonte" id="premioFonte" hidden></p>
     <p class="premio__txt">Um reconhecimento de quem mais importa: as pessoas da cidade onde ela atende. E que também chega a Balneário Camboriú e, pelo on-line, a qualquer lugar.</p>
-    <a class="btn btn--ouro" data-wa href="https://wa.me/5547996848763">Quero ser atendida pela Joyce</a>
+    <a class="btn btn--ouro magnetico" data-wa href="https://wa.me/5547996848763">Quero ser atendida pela Joyce</a>
   </div>
   <p class="premio__dica" aria-hidden="true"><span class="dica__mouse">Passe o mouse pela folha de ouro</span><span class="dica__toque">Toque na folha de ouro</span></p>
 </section>
@@ -220,7 +229,7 @@
     </ol>
   </div>
   <div class="caminho__cta">
-    <a class="btn btn--vinho" data-wa data-msg="Olá, Joyce! Vi seu site e quero começar o meu tratamento." href="https://wa.me/5547996848763">Quero começar</a>
+    <a class="btn btn--vinho magnetico" data-wa data-msg="Olá, Joyce! Vi seu site e quero começar o meu tratamento." href="https://wa.me/5547996848763">Quero começar</a>
   </div>
 </section>
 
@@ -377,7 +386,7 @@
     <h2 id="t-contato" class="titulo titulo--claro">Vamos conduzir <em>o seu tratamento?</em></h2>
     <p>Me conta o que está acontecendo. A resposta vem de mim, no WhatsApp.</p>
     <div class="contato__acoes">
-      <a class="btn btn--ouro" data-wa href="https://wa.me/5547996848763"><svg aria-hidden="true"><use href="#i-whats"/></svg>Agendar consulta</a>
+      <a class="btn btn--ouro magnetico" data-wa href="https://wa.me/5547996848763"><svg aria-hidden="true"><use href="#i-whats"/></svg>Agendar consulta</a>
       <a class="link link--claro" href="https://www.instagram.com/nutricionistajoyceavila/" target="_blank" rel="noopener"><svg class="link__ico" aria-hidden="true"><use href="#i-insta"/></svg>@nutricionistajoyceavila</a>
     </div>
   </div>
@@ -395,8 +404,8 @@
 
 <a class="wa-flutua" data-wa href="https://wa.me/5547996848763" aria-label="Falar com a Joyce no WhatsApp"><svg aria-hidden="true"><use href="#i-whats"/></svg></a>
 
-<script src="js/config.js?v=20261024n"></script>
-<script src="js/ouro.js?v=20261024n"></script>
-<script src="js/main.js?v=20261024n"></script>
+<script src="js/config.js?v=20261024r"></script>
+<script src="js/ouro.js?v=20261024r"></script>
+<script src="js/main.js?v=20261024r"></script>
 </body>
 </html>

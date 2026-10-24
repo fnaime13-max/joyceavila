@@ -69,8 +69,7 @@
 
   var marcar = function (sel, cls) { $$(sel).forEach(function (el) { el.classList.add(cls); }); };
   if (mov) {
-    marcar('.hero__foto, .sobre__grande, .sobre__pequena', 'cortina');
-    marcar('.hero__moldura', 'moldura-rv');
+    marcar('.sobre__grande, .sobre__pequena', 'cortina');
     marcar('.aberto__card', 'lado');
     marcar('.premio__in, .contato__in, .eco__palco, .aval-destaque', 'zoom');
     marcar('.cabeca__lead, .hero__lead, .hero__acoes, .sobre__texto > p, .sobre__texto > .link, .aberto__lead, .aberto__por, .aberto__texto > .link, .premio__txt, .premio__in .btn, .contato__in > p, .contato__acoes, .caminho__cta', 'item');
@@ -114,14 +113,49 @@
     $$('.lado, .zoom, .grupo, .item, .cabeca, .sobrelinha').forEach(function (el) { io.observe(el); });
     // elementos recortados (clip-path) não disparam o observer: quem vigia é o pai
     function vigiar(gatilho, alvos) { gatilho._alvos = alvos; io.observe(gatilho); }
-    vigiar($('.hero__visual'), [$('.hero__foto'), $('.hero__moldura')]);
-    vigiar($('.hero__texto'), [$('.hero__fatos')]);
+    vigiar($('.hero__fatos li'), [$('.hero__fatos')]);
     vigiar($('.sobre__fotos'), [$('.sobre__fotos'), $('.sobre__grande'), $('.sobre__pequena')]);
   }
 
   // paralaxe, faixa editorial, progresso e topo que se esconde
   var pars = $$('[data-par]'), imgs = $$('.cortina img'), faixas = $$('[data-faixa]'), faixa = $('.faixa');
   var prog = $('#progresso'), ultimoY = scrollY, pedido = false;
+  var heroEl = $('.hero'), manifesto = $('#manifesto'), palavras = [];
+  // manifesto: cada palavra acende conforme a rolagem
+  (function () {
+    var t = $('#manifestoTxt');
+    if (reduz) return;
+    (function andar(no) {
+      Array.prototype.slice.call(no.childNodes).forEach(function (c) {
+        if (c.nodeType === 3) {
+          var frag = document.createDocumentFragment();
+          c.textContent.split(/(\s+)/).forEach(function (w) {
+            if (!w) return;
+            if (/^\s+$/.test(w)) { frag.appendChild(document.createTextNode(' ')); return; }
+            var sp = document.createElement('span'); sp.className = 'w'; sp.textContent = w; frag.appendChild(sp); palavras.push(sp);
+          });
+          no.replaceChild(frag, c);
+        } else if (c.nodeType === 1) andar(c);
+      });
+    })(t);
+  })();
+  // profundidade com o mouse: nome, halo e figura andam em velocidades diferentes
+  if (!reduz && matchMedia('(hover: hover)').matches) {
+    heroEl.addEventListener('pointermove', function (e) {
+      heroEl.style.setProperty('--mx', (e.clientX / innerWidth - .5) * 2);
+      heroEl.style.setProperty('--my', (e.clientY / innerHeight - .5) * 2);
+    });
+    heroEl.addEventListener('pointerleave', function () { heroEl.style.setProperty('--mx', 0); heroEl.style.setProperty('--my', 0); });
+    // botões magnéticos
+    $$('.magnetico').forEach(function (b) {
+      b.addEventListener('pointermove', function (e) {
+        var r = b.getBoundingClientRect();
+        b.style.setProperty('--bx', ((e.clientX - r.left - r.width / 2) * .22).toFixed(1) + 'px');
+        b.style.setProperty('--by', ((e.clientY - r.top - r.height / 2) * .3).toFixed(1) + 'px');
+      });
+      b.addEventListener('pointerleave', function () { b.style.setProperty('--bx', '0px'); b.style.setProperty('--by', '0px'); });
+    });
+  }
   function quadroRolagem() {
     pedido = false;
     var vh = innerHeight, y = scrollY;
@@ -142,6 +176,13 @@
       var lim = r.height * .035, v = (r.top + r.height / 2 - vh / 2) * -.05;
       im.style.setProperty('--py', Math.max(-lim, Math.min(lim, v)).toFixed(1) + 'px');
     });
+    heroEl.style.setProperty('--sy', Math.min(y, vh * 1.2).toFixed(1) + 'px');
+    if (palavras.length) {
+      var mr = manifesto.getBoundingClientRect();
+      var pm = (vh * .82 - mr.top) / (mr.height * .9);
+      var acesas = Math.round(Math.max(0, Math.min(1, pm)) * palavras.length);
+      for (var w = 0; w < palavras.length; w++) palavras[w].classList.toggle('acesa', w < acesas);
+    }
     if (faixa) {
       var fr = faixa.getBoundingClientRect();
       if (fr.bottom > -200 && fr.top < vh + 200) {
@@ -234,23 +275,17 @@
 
   /* ---------- anéis de folha de ouro ---------- */
   function iniciarOuro() {
-    var cvH = $('#ouroHero'), foto = $('.hero__foto');
-    var cvR = function () { return cvH.getBoundingClientRect(); };
+    var cvH = $('#ouroHero'), fig = $('#heroFigura');
     new AnelOuro(cvH, {
       alvo: $('.hero'),
-      aneis: function () {
-        var fr = foto.getBoundingClientRect(), cr = cvR();
-        var x = fr.left - cr.left, y = fr.top - cr.top, w = fr.width, h = fr.height;
+      aneis: function () { // halo atrás da cabeça
+        var fr = fig.getBoundingClientRect(), cr = cvH.getBoundingClientRect(), w = fr.width;
         return [
-          { cx: x + w * 1.02, cy: y + h * .26, R: w * .3, larg: Math.max(8, w * .028), ini: -.4, arco: 6.2832, atras: true },
-          { cx: x + w * .02, cy: y + h * .9, R: w * .27, larg: Math.max(7, w * .026), ini: -1.2, arco: 6.2832 }
+          { cx: fr.left - cr.left + w * .63, cy: fr.top - cr.top + fr.height * .27, R: w * .44, larg: Math.max(9, w * .032), ini: -2.2, arco: 6.2832 },
+          { cx: fr.left - cr.left + w * .63, cy: fr.top - cr.top + fr.height * .27, R: w * .56, larg: Math.max(4, w * .01), ini: .6, arco: 3.4, alfa: .7 }
         ];
-      },
-      fora: function () {
-        var fr = foto.getBoundingClientRect(), cr = cvR();
-        return { l: fr.left - cr.left, t: fr.top - cr.top, r: fr.right - cr.left, b: fr.bottom - cr.top };
       }
-    }).pintar(1800);
+    }).pintar(2200);
     new AnelOuro($('#ouroPremio'), {
       alvo: $('#premio'), pintarAoVer: true,
       aneis: function (w, h) {
@@ -278,6 +313,7 @@
   document.documentElement.style.overflow = 'hidden';
   abertura(function () {
     document.documentElement.style.overflow = '';
+    $('.hero').classList.add('entrou');
     iniciarOuro();
     tracar();
     observarTudo();
